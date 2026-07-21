@@ -287,6 +287,11 @@ button {
 /* Inbox surface                                                       */
 /* ------------------------------------------------------------------ */
 .inbox {
+  /* Bounded height so .card-list scrolls internally and the command bar stays
+     pinned at the bottom (sticky breaks under .phone-frame's overflow-x, and
+     flex sizing ignores a plain height on this flex item — cap it). */
+  height: 100svh;
+  max-height: 100svh;
   padding-bottom: 0;
 }
 

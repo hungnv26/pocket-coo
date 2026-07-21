@@ -2,7 +2,7 @@
  * Timer adapter: drives the pure agent engine with real setTimeout calls.
  * Only this file (plus React internals) owns timers.
  *
- * Owned by: P3 (integration). Stub only in scaffold.
+ * Owned by: P3 (integration).
  */
 
 export interface Scheduler {
@@ -12,7 +12,23 @@ export interface Scheduler {
 }
 
 export function createScheduler(): Scheduler {
-  // TODO(P3): wrap setTimeout/clearTimeout, track handles for cancelAll.
-  const noop = () => {}
-  return { schedule: () => noop, cancelAll: noop }
+  const handles = new Set<ReturnType<typeof setTimeout>>()
+
+  return {
+    schedule(fn, ms) {
+      const handle = setTimeout(() => {
+        handles.delete(handle)
+        fn()
+      }, ms)
+      handles.add(handle)
+      return () => {
+        clearTimeout(handle)
+        handles.delete(handle)
+      }
+    },
+    cancelAll() {
+      for (const handle of handles) clearTimeout(handle)
+      handles.clear()
+    },
+  }
 }

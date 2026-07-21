@@ -47,3 +47,34 @@ Append-only. Each entry: date, package, decision, rationale.
 - **Palette:** one accent (blue `#4f8cff`) + two semantic colors only — danger
   red (high risk/urgency, reject) and amber (medium). Low risk/urgency renders
   neutral/dim, per the "no rainbow" design rule.
+
+## 2026-07-21 — P3 (Integration)
+
+1. **Command confirmations render twice by design: transient toast + persistent
+   inline command feedback.** PLAN P3.4 says "toast `message`"; the CommandBar
+   contract also renders `commandFeedback` inline. Both are wired so the
+   confirmation survives the 3-second toast expiry and QA can read counts.
+2. **Resume scripts for command-driven decisions are scheduled per affected
+   agent, computed against pre-dispatch state.** `BULK_APPROVE_LOW_RISK`
+   schedules one approve-script per distinct agent with a pending low-risk
+   card; `REJECT_MATCH` one reject-script per distinct matching agent; command
+   `DECIDE` actions use the card's agent. Keeps Flow E visible for bulk
+   commands without touching P1's pure functions.
+3. **All timers (spawn loop, resume steps, toast expiry) run through the one
+   scheduler created per mount**, so StrictMode remounts, unmount, and "Reset
+   demo" cancel everything with a single `cancelAll()`. Reset then restarts the
+   spawn chain and clears toasts/sheet/command feedback.
+4. **Sheet state is dropped whenever its card stops being pending** (e.g. a
+   bulk command resolves the card behind an open sheet): App resolves the sheet
+   card as pending-only and an effect closes the orphaned sheet, complementing
+   P2's null-card guard.
+5. **`loadState` validates snapshot shape structurally** (cards array with
+   id/title/createdAt/agentId/status checks, all five agents with status
+   objects); anything corrupt falls back to a fresh seed rather than crashing.
+6. **P2 file fix (integration bug), `src/index.css`:** the command bar's
+   `position: sticky; bottom: 0` never stuck because `.phone-frame` has
+   `overflow-x: hidden` (which breaks viewport-relative sticky), so with 20
+   real cards the bar sat ~9,400 px down the page. Fix: `.inbox { height:
+   100svh; max-height: 100svh; }` so `.card-list` scrolls internally and the
+   bar stays pinned (the `max-height` is required — flex sizing ignores the
+   plain `height` on this flex item). No component code changed.
