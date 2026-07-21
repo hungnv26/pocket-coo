@@ -30,6 +30,10 @@ export function BottomSheetHost(props: BottomSheetHostProps) {
   if (!request || !card) return null
 
   function onGripPointerDown(e: ReactPointerEvent<HTMLElement>) {
+    // Never start the swipe-down drag (or capture the pointer) from a button:
+    // pointer capture retargets the pointerup, so the click would fire on
+    // .sheet-grip-area instead of the Close button, leaving it dead.
+    if ((e.target as HTMLElement).closest('button')) return
     dragStart.current = { y: e.clientY, pointerId: e.pointerId }
     e.currentTarget.setPointerCapture?.(e.pointerId)
   }
