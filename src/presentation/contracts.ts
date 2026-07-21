@@ -62,3 +62,12 @@ export interface BottomSheetHostProps extends DecisionHandlers {
 export interface ToastHostProps {
   toasts: ToastItem[]
 }
+
+/**
+ * Added by P2 (additive): props for the command bar rendered inside
+ * InboxSurface. `feedback` mirrors InboxSurfaceProps.commandFeedback.
+ */
+export interface CommandBarProps {
+  onSubmitCommand(raw: string): void
+  feedback: { message: string; showHelp: boolean } | null
+}

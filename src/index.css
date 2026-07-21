@@ -1,18 +1,23 @@
 /*
  * Global styles. Owned by: P2 (presentation).
- * Scaffold provides only the phone frame (D1) and base resets.
- * Design: one accent color, minimal semantic colors, big readable text.
+ * Design: ONE accent color (blue) + minimal semantic colors (danger for
+ * high risk/urgency & reject, amber for medium). Big readable type,
+ * 44px minimum tap targets, no horizontal scroll at 390x844.
  */
 :root {
   --bg: #0f1115;
   --surface: #181b22;
   --card: #1f232c;
+  --card-raised: #242935;
   --border: #2c313c;
   --text: #e8eaf0;
   --text-dim: #9aa1af;
   --accent: #4f8cff;
+  --accent-soft: rgba(79, 140, 255, 0.14);
   --danger: #e5544b;
-  --ok: #3fb27f;
+  --danger-soft: rgba(229, 84, 75, 0.14);
+  --warn: #d9a038;
+  --warn-soft: rgba(217, 160, 56, 0.14);
 
   font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   font-size: 17px;
@@ -33,6 +38,7 @@ body {
 
 /* Phone-sized frame, centered on desktop (D1: max-width ~430px). */
 .phone-frame {
+  position: relative;
   max-width: 430px;
   min-height: 100svh;
   margin: 0 auto;
@@ -46,13 +52,782 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding: 16px;
+  padding: 20px 16px 16px;
+  min-height: 100svh;
 }
 
-/* Hard layout rule: minimum 44x44px tap targets. */
+/* ------------------------------------------------------------------ */
+/* Buttons (hard rule: >= 44x44px tap targets)                         */
+/* ------------------------------------------------------------------ */
 button {
   min-width: 44px;
   min-height: 44px;
   font: inherit;
   cursor: pointer;
+  border: none;
+  border-radius: 12px;
+  color: var(--text);
+  background: var(--card-raised);
+}
+
+.btn {
+  padding: 0 16px;
+  font-size: 16px;
+  font-weight: 600;
+  transition: filter 120ms ease, transform 80ms ease;
+}
+
+.btn:active {
+  transform: scale(0.97);
+  filter: brightness(1.15);
+}
+
+.btn-approve {
+  background: var(--accent);
+  color: #fff;
+}
+
+.btn-reject {
+  background: var(--danger-soft);
+  color: var(--danger);
+  box-shadow: inset 0 0 0 1.5px var(--danger);
+}
+
+.btn-neutral {
+  background: var(--card-raised);
+  box-shadow: inset 0 0 0 1px var(--border);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-dim);
+}
+
+.btn-ghost:hover {
+  color: var(--text);
+}
+
+/* ------------------------------------------------------------------ */
+/* Home surface (widget summary)                                       */
+/* ------------------------------------------------------------------ */
+.home-header {
+  margin-bottom: 20px;
+}
+
+.app-name {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.app-tagline {
+  margin: 2px 0 0;
+  color: var(--text-dim);
+  font-size: 15px;
+}
+
+.approvals-cta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  width: 100%;
+  padding: 22px 20px;
+  border-radius: 20px;
+  background: var(--accent-soft);
+  box-shadow: inset 0 0 0 1.5px var(--accent);
+  text-align: left;
+}
+
+.approvals-count {
+  font-size: 56px;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.approvals-label {
+  font-size: 19px;
+  font-weight: 600;
+}
+
+.approvals-go {
+  margin-top: 6px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.alert-lines {
+  margin: 14px 2px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.alert-line {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.alert-critical {
+  color: var(--danger);
+}
+
+.alert-critical::before {
+  content: '● ';
+  font-size: 13px;
+  vertical-align: 2px;
+}
+
+.alert-quiet {
+  color: var(--text-dim);
+  font-weight: 500;
+}
+
+.section-title {
+  margin: 0 0 10px;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-dim);
+}
+
+.agent-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.agent-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  min-height: 56px;
+}
+
+.agent-dot {
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--text-dim);
+}
+
+.agent-dot-working {
+  background: var(--accent);
+}
+
+.agent-dot-waiting_approval {
+  background: var(--warn);
+}
+
+.agent-dot-blocked {
+  background: var(--danger);
+}
+
+.agent-dot-idle {
+  background: var(--text-dim);
+}
+
+.agent-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.agent-name {
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.agent-message {
+  font-size: 14px;
+  color: var(--text-dim);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.agent-state {
+  flex: none;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-dim);
+}
+
+.agent-state-blocked {
+  color: var(--danger);
+}
+
+.home-footer {
+  margin-top: auto;
+  padding-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.btn-reset {
+  font-size: 14px;
+}
+
+/* ------------------------------------------------------------------ */
+/* Inbox surface                                                       */
+/* ------------------------------------------------------------------ */
+.inbox {
+  padding-bottom: 0;
+}
+
+.inbox-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.btn-back {
+  padding: 0 10px;
+  margin-left: -10px;
+  font-weight: 600;
+}
+
+.inbox-title {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 800;
+  flex: 1;
+}
+
+.pending-pill {
+  min-width: 34px;
+  text-align: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.card-list {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  overflow-y: auto;
+  padding-bottom: 16px;
+}
+
+/* ------------------------------------------------------------------ */
+/* Card                                                                */
+/* ------------------------------------------------------------------ */
+.card {
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 16px;
+  touch-action: none; /* pointer-event gestures own this element */
+  user-select: none;
+  -webkit-user-select: none;
+  will-change: transform;
+}
+
+.card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.agent-chip {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.badge-risk-low {
+  background: var(--card-raised);
+  color: var(--text-dim);
+}
+
+.badge-risk-medium {
+  background: var(--warn-soft);
+  color: var(--warn);
+}
+
+.badge-risk-high {
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+
+.card-title {
+  margin: 0 0 4px;
+  font-size: 20px;
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+.card-summary {
+  margin: 0 0 12px;
+  font-size: 16px;
+  color: var(--text-dim);
+}
+
+.card-meta {
+  display: flex;
+  gap: 8px;
+  margin: 0 0 10px;
+}
+
+.meta-item {
+  flex: 1;
+  min-width: 0;
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 8px 10px;
+}
+
+.meta-item dt {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
+}
+
+.meta-item dd {
+  margin: 2px 0 0;
+  font-size: 15px;
+  font-weight: 700;
+  overflow-wrap: break-word;
+}
+
+.urgency {
+  text-transform: capitalize;
+}
+
+.urgency-high {
+  color: var(--danger);
+}
+
+.urgency-medium {
+  color: var(--warn);
+}
+
+.urgency-low {
+  color: var(--text-dim);
+}
+
+.card-recommend {
+  margin: 0 0 12px;
+  font-size: 15px;
+  color: var(--text-dim);
+}
+
+.card-recommend strong {
+  color: var(--text);
+  text-transform: capitalize;
+}
+
+.card-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  touch-action: auto;
+}
+
+.card-actions .btn-ghost {
+  background: var(--surface);
+  box-shadow: inset 0 0 0 1px var(--border);
+}
+
+/* Swipe hint overlay while dragging past a threshold */
+.swipe-hint {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 18px;
+  font-size: 26px;
+  font-weight: 800;
+  pointer-events: none;
+}
+
+.swipe-hint-approve {
+  background: var(--accent-soft);
+  color: var(--accent);
+  box-shadow: inset 0 0 0 2px var(--accent);
+}
+
+.swipe-hint-reject {
+  background: var(--danger-soft);
+  color: var(--danger);
+  box-shadow: inset 0 0 0 2px var(--danger);
+}
+
+.swipe-hint-delegate {
+  background: var(--card-raised);
+  color: var(--text);
+  box-shadow: inset 0 0 0 2px var(--text-dim);
+}
+
+/* ------------------------------------------------------------------ */
+/* Empty state                                                         */
+/* ------------------------------------------------------------------ */
+.empty-state {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px 24px;
+  color: var(--text-dim);
+}
+
+.empty-title {
+  margin: 0 0 6px;
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.empty-hint {
+  margin: 0;
+  font-size: 16px;
+}
+
+/* ------------------------------------------------------------------ */
+/* Command bar (pinned to the bottom — one-handed reach)               */
+/* ------------------------------------------------------------------ */
+.command-bar {
+  position: sticky;
+  bottom: 0;
+  margin: 0 -16px;
+  padding: 10px 16px calc(12px + env(safe-area-inset-bottom, 0px));
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+}
+
+.command-form {
+  display: flex;
+  gap: 8px;
+}
+
+.command-input {
+  flex: 1;
+  min-width: 0;
+  min-height: 48px;
+  padding: 0 14px;
+  font: inherit;
+  font-size: 16px;
+  color: var(--text);
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.command-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.command-input::placeholder {
+  color: var(--text-dim);
+}
+
+.command-send {
+  flex: none;
+}
+
+.command-feedback {
+  margin-bottom: 10px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  font-size: 15px;
+  animation: rise-in 160ms ease-out;
+}
+
+.command-feedback-message {
+  margin: 0;
+  font-weight: 600;
+}
+
+.command-examples {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.command-example {
+  width: 100%;
+  text-align: left;
+  padding: 0 12px;
+  background: var(--surface);
+  border-radius: 10px;
+  color: var(--accent);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+/* ------------------------------------------------------------------ */
+/* Bottom sheets                                                       */
+/* ------------------------------------------------------------------ */
+.sheet-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.sheet-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  animation: fade-in 160ms ease-out;
+}
+
+.sheet {
+  position: relative;
+  width: min(430px, 100%);
+  max-height: 82svh;
+  display: flex;
+  flex-direction: column;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-bottom: none;
+  border-radius: 22px 22px 0 0;
+  animation: slide-up 220ms ease-out;
+  will-change: transform;
+}
+
+.sheet-grip-area {
+  touch-action: none;
+  cursor: grab;
+}
+
+.sheet-grip {
+  width: 44px;
+  height: 5px;
+  border-radius: 3px;
+  background: var(--border);
+  margin: 10px auto 2px;
+}
+
+.sheet-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 0 8px 4px 20px;
+}
+
+.sheet-title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.sheet-close {
+  font-weight: 600;
+}
+
+.sheet-body {
+  overflow-y: auto;
+  padding: 4px 20px 20px;
+}
+
+.sheet-card-ref {
+  margin: 0 0 12px;
+  font-size: 16px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.sheet-text {
+  margin: 0 0 14px;
+  font-size: 17px;
+  line-height: 1.55;
+}
+
+.sheet-facts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 0;
+}
+
+.fact {
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 10px 12px;
+}
+
+.fact dt {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
+}
+
+.fact dd {
+  margin: 3px 0 0;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.delegate-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.delegate-option {
+  width: 100%;
+  min-height: 52px;
+  text-align: left;
+  padding: 0 16px;
+  font-size: 17px;
+  font-weight: 600;
+  background: var(--surface);
+  box-shadow: inset 0 0 0 1px var(--border);
+}
+
+.delegate-option:active {
+  box-shadow: inset 0 0 0 1.5px var(--accent);
+  color: var(--accent);
+}
+
+.sheet-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: 12px 20px calc(16px + env(safe-area-inset-bottom, 0px));
+  border-top: 1px solid var(--border);
+}
+
+.sheet-actions .btn {
+  min-height: 50px;
+}
+
+/* ------------------------------------------------------------------ */
+/* Toasts                                                              */
+/* ------------------------------------------------------------------ */
+.toast-host {
+  position: fixed;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(398px, calc(100% - 32px));
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.toast {
+  padding: 12px 16px;
+  border-radius: 14px;
+  background: var(--card-raised);
+  border: 1px solid var(--border);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+  font-size: 15px;
+  font-weight: 600;
+  animation: drop-in 200ms ease-out;
+}
+
+/* ------------------------------------------------------------------ */
+/* Animations                                                          */
+/* ------------------------------------------------------------------ */
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes drop-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sheet,
+  .sheet-backdrop,
+  .toast,
+  .command-feedback {
+    animation: none;
+  }
 }
