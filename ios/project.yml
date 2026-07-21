@@ -21,5 +21,6 @@ targets:
         INFOPLIST_KEY_UIUserInterfaceStyle: Dark
         INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: UIInterfaceOrientationPortrait
         TARGETED_DEVICE_FAMILY: "1,2"
-        CODE_SIGNING_ALLOWED: NO
+        CODE_SIGN_STYLE: Automatic
+        DEVELOPMENT_TEAM: Y9T5MPV87F
         SWIFT_VERSION: "5.9"
