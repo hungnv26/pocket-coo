@@ -1,0 +1,25 @@
+name: PocketCOO
+options:
+  bundleIdPrefix: net.hungngo
+  deploymentTarget:
+    iOS: "16.0"
+targets:
+  PocketCOO:
+    type: application
+    platform: iOS
+    sources:
+      - path: Sources
+      - path: WebDist
+        type: folder
+        buildPhase: resources
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: net.hungngo.pocketcoo
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: Pocket COO
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UIUserInterfaceStyle: Dark
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: UIInterfaceOrientationPortrait
+        TARGETED_DEVICE_FAMILY: "1,2"
+        CODE_SIGNING_ALLOWED: NO
+        SWIFT_VERSION: "5.9"

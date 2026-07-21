@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# iOS wrapper (generated)
+ios/build/
+ios/WebDist/
+ios/PocketCOO.xcodeproj/

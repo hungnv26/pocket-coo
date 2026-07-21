@@ -38,6 +38,30 @@ pnpm preview
 
 The app runs at **http://localhost:5173** in a mobile phone frame (430px max-width, centered on desktop). Dev server uses strictPort — if 5173 is busy, stop the other process; it does not drift ports.
 
+### Run on iOS (Xcode)
+
+A native SwiftUI wrapper lives in `ios/` — a WKWebView shell that serves the built web bundle over a custom `pococo://` URL scheme (required because ES-module scripts do not execute over `file://`). Prerequisites: Xcode 16+ and [XcodeGen](https://github.com/yonaskolb/XcodeGen) (`brew install xcodegen`).
+
+```bash
+# 1. Build the web bundle with relative asset paths and stage it for iOS
+pnpm exec vite build --base=./
+rm -rf ios/WebDist && cp -R dist ios/WebDist
+
+# 2. Generate the Xcode project and build for the simulator
+cd ios
+xcodegen generate
+xcodebuild -project PocketCOO.xcodeproj -scheme PocketCOO \
+  -destination 'platform=iOS Simulator,name=iPhone 17 Pro' \
+  -derivedDataPath build build
+
+# 3. Install and launch in the simulator
+xcrun simctl boot "iPhone 17 Pro" || true && open -a Simulator
+xcrun simctl install "iPhone 17 Pro" build/Build/Products/Debug-iphonesimulator/PocketCOO.app
+xcrun simctl launch "iPhone 17 Pro" net.hungngo.pocketcoo
+```
+
+Or open `ios/PocketCOO.xcodeproj` in Xcode after step 2 and hit Run. localStorage persistence works in the wrapper (the custom scheme has a stable origin). The domain/application layers being React- and browser-free means a fully native SwiftUI client can reuse the same contracts later — this wrapper is the stepping stone, not the destination.
+
 ---
 
 ## How to Use
