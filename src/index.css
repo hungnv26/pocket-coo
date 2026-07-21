@@ -1,0 +1,58 @@
+/*
+ * Global styles. Owned by: P2 (presentation).
+ * Scaffold provides only the phone frame (D1) and base resets.
+ * Design: one accent color, minimal semantic colors, big readable text.
+ */
+:root {
+  --bg: #0f1115;
+  --surface: #181b22;
+  --card: #1f232c;
+  --border: #2c313c;
+  --text: #e8eaf0;
+  --text-dim: #9aa1af;
+  --accent: #4f8cff;
+  --danger: #e5544b;
+  --ok: #3fb27f;
+
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-size: 17px;
+  line-height: 1.45;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+}
+
+/* Phone-sized frame, centered on desktop (D1: max-width ~430px). */
+.phone-frame {
+  max-width: 430px;
+  min-height: 100svh;
+  margin: 0 auto;
+  background: var(--surface);
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+.surface {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+}
+
+/* Hard layout rule: minimum 44x44px tap targets. */
+button {
+  min-width: 44px;
+  min-height: 44px;
+  font: inherit;
+  cursor: pointer;
+}
