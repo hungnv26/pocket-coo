@@ -2,6 +2,11 @@
 
 **Pocket COO** is a mobile-first web app that reframes your phone as an executive decision surface: an approval inbox where you can triage 20+ pending agent decisions in under five minutes with swipe-speed gestures and command-line bulk actions, see each agent resume work immediately after you decide, and stay aware of critical alerts at a glance from the Home screen.
 
+<p align="center">
+  <img src="docs/screenshots/ios-home.png" alt="Pocket COO Home screen running on iOS — approvals waiting, critical alerts, and live agent status" width="300">
+</p>
+<p align="center"><em>The Home surface running natively on iOS (SwiftUI + WKWebView wrapper). One glance: how many decisions wait, what's critical, and what each agent is doing.</em></p>
+
 **Target user:** Small-business owners and solo founders who run cloud AI-agent teams and are away from a desk most of the day. You are time-poor, decision-rich, and use your phone one-handed.
 
 **Why it matters:** AI-agent organizations are becoming real. The bottleneck is no longer labor—it's human judgment. This app makes decision-making fast enough to do one-handed in the gaps of your day.
