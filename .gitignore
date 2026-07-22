@@ -27,3 +27,6 @@ dist-ssr
 ios/build/
 ios/WebDist/
 ios/PocketCOO.xcodeproj/
+
+# Claude Code local state (worktrees, launch config)
+.claude/
